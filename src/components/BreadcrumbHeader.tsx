@@ -19,12 +19,12 @@ function BreadcrumbHeader() {
     <div className="flex items-center flex-start">
       <MobileSidebar />
       <Breadcrumb>
-        <BreadcrumbList>
+        <BreadcrumbList className="gap-0">
           {paths.map((path, index) => (
             <React.Fragment key={index}>
               <BreadcrumbItem>
-                <BreadcrumbLink href={`/${path}`}>
-                  {path === "" ? "Home" : path}
+                <BreadcrumbLink href={`/${path}`} className="capitalize">
+                  {path === "" ? "Home" : `/${path}`}
                 </BreadcrumbLink>
               </BreadcrumbItem>
             </React.Fragment>

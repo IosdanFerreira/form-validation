@@ -82,9 +82,9 @@ export function MobileSidebar() {
 
   return (
     <div className="block border-separate bg-background md:hidden">
-      <nav className="container flex items-center justify-between px-8">
+      <nav className="container flex items-center">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
+          <SheetTrigger asChild className="justify-baseline">
             <Button variant="ghost" size={"icon"}>
               <MenuIcon />
             </Button>

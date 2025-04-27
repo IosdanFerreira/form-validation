@@ -1,3 +1,14 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Headset, LogOut, Settings } from "lucide-react";
+
 import BreadcrumbHeader from "@/components/BreadcrumbHeader";
 import DesktopSidebar from "@/components/Sidebar";
 import React from "react";
@@ -13,6 +24,42 @@ function layout({ children }: { children: React.ReactNode }) {
           <BreadcrumbHeader />
           <div className="flex items-center space-x-3">
             <ThemeModeToggle />
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild className="cursor-pointer">
+                <Avatar>
+                  <AvatarImage
+                    src="https://github.com/shadcn.png"
+                    alt="@shadcn"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <Settings />
+                  Configurações
+                </DropdownMenuItem>
+
+                <DropdownMenuItem>
+                  <Headset />
+                  Suporte
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem>
+                  <LogOut />
+                  Sair
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </header>
         <Separator />
