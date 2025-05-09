@@ -1,6 +1,15 @@
 "use client";
 
 import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Form,
   FormControl,
   FormField,
@@ -8,11 +17,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import InputPassword from "@/components/InputPassword";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,9 +50,17 @@ function SignupForm() {
     },
   });
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [formData, setFormData] = useState<z.infer<typeof formSchema> | null>(
+    null
+  );
+
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+
+    setIsDialogOpen(true);
+    setFormData(values);
   }
 
   return (
@@ -127,6 +144,33 @@ function SignupForm() {
               );
             }}
           />
+
+          <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Login Realizado com sucesso</AlertDialogTitle>
+                <AlertDialogDescription>
+                  <p className="mb-2 text-md flex gap-2">
+                    <span className="block font-semibold">Email:</span>
+                    {formData?.name}
+                  </p>
+
+                  <p className="mb-2 text-md flex gap-2">
+                    <span className="block font-semibold">Email:</span>
+                    {formData?.email}
+                  </p>
+
+                  <p className="mb-2 text-md flex gap-2">
+                    <span className="block font-semibold">Senha:</span>
+                    {formData?.password}
+                  </p>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Fechar</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
           <Button type="submit" className="w-full cursor-pointer text-md">
             Entrar

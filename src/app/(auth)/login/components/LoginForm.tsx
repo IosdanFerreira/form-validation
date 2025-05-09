@@ -2,14 +2,12 @@
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   Form,
@@ -19,15 +17,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import React, { startTransition, useState } from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import InputPassword from "@/components/InputPassword";
-import Link from "next/link";
-import { loginUserAction } from "../actions/loginUser.action";
 import { useForm } from "react-hook-form";
-import { useFormState } from "react-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -52,31 +47,16 @@ function LoginForm() {
     },
   });
 
-  const [state, formAction] = useFormState(loginUserAction, {
-    success: false,
-    message: "",
-  });
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [formData, setFormData] = useState<z.infer<typeof formSchema> | null>(
+    null
+  );
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const formData = new FormData();
-    formData.append("email", values.email);
-    formData.append("password", values.password);
+    console.log(values);
 
-    startTransition(async () => {
-      const result = await loginUserAction(formData);
-
-      if (!result.success) {
-        // Se houver um erro, mostramos o diálogo de erro
-        setIsDialogOpen(true);
-        setIsDialogOpen(true); // Abre o diálogo
-        return;
-      }
-
-      // Caso contrário, você pode redirecionar ou fazer outra ação
-      console.log(result);
-    });
+    setIsDialogOpen(true);
+    setFormData(values);
   }
 
   return (
@@ -135,32 +115,27 @@ function LoginForm() {
             }}
           />
 
-          {isDialogOpen && (
-            <AlertDialog>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Ocorreu um erro inesperado
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    {state.message}
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Fechar</AlertDialogCancel>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )}
+          <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Login Realizado com sucesso</AlertDialogTitle>
+                <AlertDialogDescription>
+                  <p className="mb-2 text-md flex gap-2">
+                    <span className="block font-semibold">Email:</span>
+                    {formData?.email}
+                  </p>
 
-          <div className="flex items-center justify-end gap-1 my-8">
-            <Link
-              className="text-primary font-semibold hover:underline"
-              href="/cadastro"
-            >
-              Esqueceu sua senha?
-            </Link>
-          </div>
+                  <p className="mb-2 text-md flex gap-2">
+                    <span className="block font-semibold">Senha:</span>
+                    {formData?.password}
+                  </p>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Fechar</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
           <Button type="submit" className="w-full cursor-pointer text-md">
             Entrar
